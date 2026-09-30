@@ -13,11 +13,15 @@ def generate_command(rng, values):
     возвращает правильный ответ, если команда является запросом.
     """
 
-    command_type = rng.choices(
-        ["k", "q", "n"],
-        weights=[45, 35, 20],
-        k=1
-    )[0]
+    # m i имеет смысл только если есть хотя бы один ключ.
+    if values:
+        choices = ["k", "q", "n", "m"]
+        weights = [40, 25, 15, 20]
+    else:
+        choices = ["k", "q", "n"]
+        weights = [60, 25, 15]
+
+    command_type = rng.choices(choices, weights=weights, k=1)[0]
 
     # --------------------------------------------------------
     # k x
@@ -55,23 +59,36 @@ def generate_command(rng, values):
     #
     # Количество ключей строго меньше x
     # --------------------------------------------------------
-    else:
+    elif command_type == "n":
         x = rng.randint(-1_000_000, 1_000_000)
 
         answer = bisect_left(values, x)
 
         return f"n {x}", answer
 
+    # --------------------------------------------------------
+    # m i
+    #
+    # i-й по возрастанию ключ (1-индексация).
+    # --------------------------------------------------------
+    else:  # command_type == "m"
+        index = rng.randint(1, len(values))
+        answer = values[index - 1]
+
+        return f"m {index}", answer
+
 
 # ============================================================
 # Генерация одного теста
 # ============================================================
 
-def generate_test(rng, commands_per_test, values):
+def generate_test(rng, commands_per_test):
     """
-    Генерирует один тест с заданным количеством
-    логических команд.
+    Генерирует один независимый тест.
+    Множество ключей создаётся заново — дерево считается пустым.
     """
+
+    values = []          # <-- ключевое изменение: состояние своё у каждого теста
 
     commands = []
     answers = []
@@ -94,11 +111,6 @@ def generate_test(rng, commands_per_test, values):
 def generate_tests(test_count, commands_per_test, output_file, seed):
     rng = random.Random(seed)
 
-    # Важно:
-    # Tree в твоём тестере не пересоздаётся между тестами,
-    # поэтому состояние дерева сохраняем между тестами.
-    values = []
-
     total_commands = test_count * commands_per_test
 
     print("Генерация тестов...")
@@ -112,14 +124,10 @@ def generate_tests(test_count, commands_per_test, output_file, seed):
         file.write(f"{test_count}\n")
 
         for test_number in range(test_count):
-            commands, answers = generate_test(
-                rng,
-                commands_per_test,
-                values
-            )
+            commands, answers = generate_test(rng, commands_per_test)
 
             file.write(commands + "\n")
-            file.write(answers + "\n")
+            file.write(answers + " \n")
 
             if (test_number + 1) % max(1, test_count // 10) == 0:
                 progress = (test_number + 1) * 100 // test_count
