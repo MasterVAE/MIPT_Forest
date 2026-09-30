@@ -15,6 +15,7 @@ namespace
         if (kind == "set")  return std::make_unique<Tree_set>();
         if (kind == "vec")  return std::make_unique<Tree_vec>();
         if (kind == "nat")  return std::make_unique<Tree_nat>();
+        if (kind == "avl")  return std::make_unique<Tree_avl>();
         return std::make_unique<Tree_nat>();
     }
 }
