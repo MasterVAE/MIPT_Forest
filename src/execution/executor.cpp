@@ -36,9 +36,7 @@ std::string Execute(Tree& tree, std::vector<std::string> commands)
             int l_value = std::stoi(commands[++i]);
             int r_value = std::stoi(commands[++i]);
 
-            result += std::to_string(
-                tree.Keys_in_interval(l_value, r_value)
-            );
+            result += std::to_string(tree.Keys_in_interval(l_value, r_value));
 
             result += " ";
         }
@@ -52,9 +50,7 @@ std::string Execute(Tree& tree, std::vector<std::string> commands)
 
             int index = std::stoi(commands[++i]);
 
-            result += std::to_string(
-                tree.Keys_small_number(index)
-            );
+            result += std::to_string(tree.Keys_small_number(index));
 
             result += " ";
         }
@@ -68,9 +64,7 @@ std::string Execute(Tree& tree, std::vector<std::string> commands)
 
             int x = std::stoi(commands[++i]);
 
-            result += std::to_string(
-                tree.Key_smaller(x)
-            );
+            result += std::to_string(tree.Key_smaller(x));
 
             result += " ";
         }

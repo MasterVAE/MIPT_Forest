@@ -5,10 +5,12 @@
 #include <set>
 #include <algorithm>
 #include <stdio.h>
+#include <iostream>
 
 class Tree
 {
 public:
+    std::string name;
     Tree() {};
     virtual ~Tree() = default;
     virtual void Insert(int) = 0;
@@ -78,7 +80,8 @@ public:
 
     int Keys_small_number(int i) override
     {
-        return v[i - 1];
+        if(i < v.size())    return v[i - 1];
+        return 0;
     }
 
     size_t Key_smaller(int x) override
@@ -199,7 +202,6 @@ public:
             }
         }
 
-        std::cerr << "Not found " << std::endl;
         return 0;
     }
 
@@ -412,7 +414,6 @@ public:
             }
         }
 
-        std::cerr << "Not found " << std::endl;
         return 0;
     }
 

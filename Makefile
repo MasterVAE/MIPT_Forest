@@ -6,7 +6,8 @@ TARGET  = forest
 BUILD_DIR = build
 SRCS    = src/main.cpp \
           src/execution/executor.cpp \
-          src/test/test.cpp 
+          src/test/test.cpp \
+          src/benchmark/bench.cpp
 
 OBJS    = $(patsubst src/%.cpp,$(BUILD_DIR)/%.o,$(SRCS))
 
